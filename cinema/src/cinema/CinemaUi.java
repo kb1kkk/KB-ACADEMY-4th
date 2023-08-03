@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class CinemaUi {
 
-	private TiketService TiketSvc;
+	private TicketService TicketSvc;
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class CinemaUi {
 	}
 
 	public void init() {
-		TiketSvc = new TiketServiceImpl();
+		TicketSvc = new TicketServiceImpl();
 	}
 
 	private void mainMenu() {

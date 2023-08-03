@@ -1,6 +1,6 @@
 package cinema;
 
-public class TiketDto {
+public class TicketDto {
 	private int tnum; // 티켓번호
 	private int scnum; // 상영일정번호
 	private int thnum; // 상영관번호
@@ -9,10 +9,10 @@ public class TiketDto {
 	private int tprice; // 가격
 	private int paystatus; //결제유무
 	
-	public TiketDto() {
+	public TicketDto() {
 	}
 
-	public TiketDto(int tnum, int scnum, int thnum, int seatnumber, int cnum, int tprice, int paystatus) {
+	public TicketDto(int tnum, int scnum, int thnum, int seatnumber, int cnum, int tprice, int paystatus) {
 		super();
 		this.tnum = tnum;
 		this.scnum = scnum;

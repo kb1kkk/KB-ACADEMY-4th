@@ -1,4 +1,4 @@
-package cinema.dao;
+package cinema.exception;
 
 public class DuplicatedIdException extends Exception {
 	public DuplicatedIdException() {

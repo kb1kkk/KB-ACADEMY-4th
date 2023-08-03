@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import cinema.dao.DuplicatedIdException;
-import cinema.dao.TiketDao;
+import cinema.dao.TicketDao;
+import cinema.exception.DuplicatedIdException;
 import cinema.util.JdbcUtil;
 
-public class TiketDaoImpl implements TiketDao {
+public class TicketDaoImpl implements TicketDao {
 
 	@Override
-	public void add(TiketDto dto) throws SQLException, DuplicatedIdException {
+	public void add(TicketDto dto) throws SQLException, DuplicatedIdException {
 		// DBMS 연결
 		Connection con = null;
 		PreparedStatement ps = null;

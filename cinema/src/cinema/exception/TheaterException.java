@@ -1,4 +1,4 @@
-package cinema.util;
+package cinema.exception;
 
 public class TheaterException extends Exception {
 	public TheaterException() {

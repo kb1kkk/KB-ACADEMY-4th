@@ -1,4 +1,4 @@
-package cinema.util;
+package cinema.exception;
 
 public class RecordNotFoundException extends Exception {
 	public RecordNotFoundException() {
