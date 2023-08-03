@@ -10,7 +10,7 @@ public class CinemaUi {
 	public static void main(String[] args) {
 		new CinemaUi().go();
 	}
-
+// TEST
 	private void go() {
 		init();
 		while (true) {
