@@ -62,10 +62,12 @@ public class CinemaUi {
 				int snackStatus = Integer.parseInt(sc.nextLine());
 				if (snackStatus == 1) {
 					snack();
+					
 				} else if (snackStatus == 2) {
 					System.out.println("결제하기로 넘어감");
 				} 
 				member();
+				
 			} else if (movieMenu == 3) {
 				System.out.println("예매 취소");
 				member();
@@ -160,10 +162,8 @@ public class CinemaUi {
 
 			if (snackMenu == 1) {
 				System.out.println("간식 목록");
-				snack();
 			} else if (snackMenu == 2) {
 				System.out.println("간식 구매");
-				snack();
 			} else if (snackMenu == 3) {
 				System.out.println("간식 구매종료");
 				System.out.println("결제하기로 넘어감");
