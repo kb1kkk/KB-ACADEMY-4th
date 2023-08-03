@@ -17,7 +17,7 @@ public class TicketServiceImpl implements TicketService {
 			throw new TicketException(e.getMessage());
 		} catch (DuplicatedIdException e) {
 		}
-		
+		   
 		return true;
 	}
 
