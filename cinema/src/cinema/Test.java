@@ -1,7 +1,7 @@
 package cinema;
 
-public class Man {
+public class Test {
 	public static void main(String[] args) {
-		
+		//tttttt
 	}
 }
