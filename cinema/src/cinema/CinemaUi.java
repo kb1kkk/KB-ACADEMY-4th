@@ -8,7 +8,7 @@ public class CinemaUi {
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		new CinemaUi().go();
+		new CinemaUi().go();  //teststst
 	}
 // TEST
 	private void go() {
