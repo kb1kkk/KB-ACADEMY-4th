@@ -1,6 +1,7 @@
 package cinema.seat.service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import cinema.dtos.SeatDto;
 import cinema.exception.DuplicatedIdException;
@@ -25,9 +26,15 @@ public class SeatServiceImpl implements SeatService {
 	}
 
 	@Override
-	public boolean update(SeatDto dto) throws TheaterException, RecordNotFoundException {
-		// TODO Auto-generated method stub
-		return false;
+	public List<SeatDto> check() throws TheaterException {
+		List<SeatDto> list = null;
+		try {
+			list = seatDao.list();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new TheaterException(e.getMessage());
+		}
+		return list;
 	}
 
 }

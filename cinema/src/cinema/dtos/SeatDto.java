@@ -2,16 +2,16 @@ package cinema.dtos;
 
 public class SeatDto {
 	private int seatnum;	// 좌석번호 PK
-	private int tnumber;	// 상영관번호 FK
+	private int thnum;	// 상영관번호 FK
 	private int seatstatus;	// 좌석배정유무 0 빈자리, 1 예약석
 	
 	public SeatDto() {
 	}
 
-	public SeatDto(int seatnum, int tnumber, int seatstatus) {
+	public SeatDto(int seatnum, int thnum, int seatstatus) {
 		super();
 		this.seatnum = seatnum;
-		this.tnumber = tnumber;
+		this.thnum = thnum;
 		this.seatstatus = seatstatus;
 	}
 
@@ -23,12 +23,13 @@ public class SeatDto {
 		this.seatnum = seatnum;
 	}
 
-	public int getTnumber() {
-		return tnumber;
+
+	public int getThnum() {
+		return thnum;
 	}
 
-	public void setTnumber(int tnumber) {
-		this.tnumber = tnumber;
+	public void setThnum(int thnum) {
+		this.thnum = thnum;
 	}
 
 	public int getSeatstatus() {
@@ -41,9 +42,10 @@ public class SeatDto {
 
 	@Override
 	public String toString() {
-		return "seatnum=" + seatnum + ", tnumber=" + tnumber + ", seatstatus=" + seatstatus;
+		return "SeatDto [seatnum=" + seatnum + ", thnum=" + thnum + ", seatstatus=" + seatstatus + "]";
 	}
 
+	
 	
 	
 	
