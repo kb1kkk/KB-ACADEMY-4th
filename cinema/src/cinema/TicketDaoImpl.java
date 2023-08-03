@@ -18,8 +18,8 @@ public class TicketDaoImpl implements TicketDao {
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "INSERT INTO TIKET(TNUM, SCNUM, THNUM, SEATNUMBER, CNUM, TPRICE, PAYSTATUS)";
-			sql += "VALUES(TIKET_SEQ.NEXTVAL,?,?,?,?,?,?)";
+			String sql = "INSERT INTO TICKET(TNUM, SCNUM, THNUM, SEATNUMBER, CNUM, TPRICE, PAYSTATUS)";
+			sql += "VALUES(TICKET_SEQ.NEXTVAL,?,?,?,?,?,?)";
 
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);
