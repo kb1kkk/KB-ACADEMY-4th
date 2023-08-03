@@ -172,7 +172,6 @@ public class CinemaUi {
 				System.out.println("비정상적인 접근입니다.");
 			}
 		}
-		return;
 	}
 
 }
