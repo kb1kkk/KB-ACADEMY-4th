@@ -46,7 +46,8 @@ public class CinemaUi {
 	private SnackOrderService snackOrdSvc;
 
 	private static Scanner sc = new Scanner(System.in);
-
+	private CustomerDto curUser = null;
+	
 	public static void main(String[] args) {
 		new CinemaUi().go();
 	}
@@ -90,6 +91,8 @@ public class CinemaUi {
 			} else if (user.getCpw().equals(cpw) == true) {
 				System.out.println("[로그인 성공]");
 				isManager = user.getCnum();
+				curUser = user;
+				System.out.println(curUser);
 			} else {
 				System.out.println("아이디 또는 비밀번호가 일치하지 않습니다");
 				return;
@@ -197,7 +200,8 @@ public class CinemaUi {
 		// 좌석status가 0일떄
 		int ticketPrice = 120000;
 		// 현재 회원 정보 가져오기
-		int cnum = 1;
+		System.out.println(curUser);
+		int cnum = curUser.getCnum();
 		TicketDto dto = new TicketDto(0, scnum, thnum, seatnumber, cnum, ticketPrice, 0);
 
 		try {
