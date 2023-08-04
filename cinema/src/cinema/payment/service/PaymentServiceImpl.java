@@ -14,7 +14,7 @@ public class PaymentServiceImpl implements PaymentService {
 	PaymentDao paymentDao = new PaymentDaoImpl();
 	
 	@Override
-	public boolean pay(PaymentDto pdto) throws PaymentException, RecordNotFoundException {
+	public boolean getPay(PaymentDto pdto) throws PaymentException, RecordNotFoundException {
 		try {
 			paymentDao.add(pdto);
 			paymentDao.changeTicketStatus(pdto.getCnum());
@@ -26,7 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public PaymentDto payResult(PaymentDto pdto) throws PaymentException {
+	public PaymentDto getPayResult(PaymentDto pdto) throws PaymentException {
 		PaymentDto dto = null;
 		try {
 			dto = paymentDao.read(pdto);
@@ -41,7 +41,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public List<PaymentDto> payListByCnum(int cnum) throws PaymentException {
+	public List<PaymentDto> getPayListByCnum(int cnum) throws PaymentException {
 		List<PaymentDto> list = null;
 		try {
 			list = paymentDao.payListByCnum(cnum);
@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public List<PaymentDto> payList() throws PaymentException {
+	public List<PaymentDto> getPayList() throws PaymentException {
 		List<PaymentDto> list = null;
 		try {
 			list = paymentDao.payList();
@@ -82,7 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
 			e.printStackTrace();
 			throw new PaymentException(e.getMessage());
 		}
-		return 0;
+		return price;
 	}
 
 }

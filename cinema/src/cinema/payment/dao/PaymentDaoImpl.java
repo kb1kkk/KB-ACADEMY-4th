@@ -52,7 +52,7 @@ public class PaymentDaoImpl implements PaymentDao {
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "SELECT * PAYMENT WHERE PNUM = ?";
+			String sql = "SELECT * FROM PAYMENT WHERE PNUM = ?";
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);
 			
@@ -90,13 +90,13 @@ public class PaymentDaoImpl implements PaymentDao {
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "SELECT * FROM PAYMENT WHERER CNUM = ?";
+			String sql = "SELECT * FROM PAYMENT WHERE CNUM = ?";
 			
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);
 			
 			// 5. 데이터 설정
-			
+			ps.setInt(1, cnum);
 			
 			// 6. SQL 전송 및 결과 수신
 			// 		DML전송 : executeUpdate() : int 반환
@@ -129,7 +129,7 @@ public class PaymentDaoImpl implements PaymentDao {
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "SELECT * FROM PAYMENT WHERER CNUM = ?";
+			String sql = "SELECT * FROM PAYMENT";
 			
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);
@@ -164,11 +164,11 @@ public class PaymentDaoImpl implements PaymentDao {
 	public int countTicketByCnum(int cnum) throws SQLException, RecordNotFoundException {
 		Connection con = null;
 		PreparedStatement ps = null;
-		int num = -1;
+		int num = 0;
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "SELECT COUNT(*) FROM TICKET WHERE CNUM = ?";
+			String sql = "SELECT COUNT(*) FROM TICKET WHERE CNUM = ? AND PAYSTATUS = 0";
 			
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);
@@ -193,19 +193,19 @@ public class PaymentDaoImpl implements PaymentDao {
 	}
 
 	@Override
-	public int getSnackPrice(int snum) throws SQLException, RecordNotFoundException {
+	public int getSnackPrice(int sonum) throws SQLException, RecordNotFoundException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		int price = 0;
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "SELECT STCNT SNACKORDER WHERE SNUM = ?";
+			String sql = "SELECT STCNT FROM SNACKORDER WHERE SONUM = ?";
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);
 			
 			// 5. 데이터 설정
-			ps.setInt(1,snum);
+			ps.setInt(1,sonum);
 			
 			// 6. SQL 전송 및 결과 수신
 			// 		DML전송 : executeUpdate() : int 반환
@@ -213,7 +213,7 @@ public class PaymentDaoImpl implements PaymentDao {
 			ResultSet rs=ps.executeQuery();
 			//id가 PK이면 0 개 또는 1 개 행을 반환
 			if(rs.next()) { //조회결과가 있다.
-				price = rs.getInt("STCNT");
+				price = rs.getInt(1);
 			}
 		} catch (ClassNotFoundException e) {
 			throw new SQLException(e);
@@ -227,7 +227,7 @@ public class PaymentDaoImpl implements PaymentDao {
 	@Override
 	public int getTicketPrice(int cnum) throws SQLException, RecordNotFoundException {
 		int ticketNum = countTicketByCnum(cnum);
-		int price = ticketNum*13000;
+		int price = ticketNum*12000;
 		
 		return price;
 	}
