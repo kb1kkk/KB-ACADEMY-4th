@@ -26,10 +26,10 @@ public class SeatServiceImpl implements SeatService {
 	}
 
 	@Override
-	public List<SeatDto> check() throws TheaterException {
+	public List<SeatDto> check(int thnum) throws TheaterException {
 		List<SeatDto> list = null;
 		try {
-			list = seatDao.list();
+			list = seatDao.list(thnum);
 		} catch(SQLException e) {
 			e.printStackTrace();
 			throw new TheaterException(e.getMessage());

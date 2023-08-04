@@ -8,6 +8,7 @@ import cinema.customer.service.CustomerServiceImpl;
 import cinema.dtos.CustomerDto;
 import cinema.dtos.MovieDto;
 import cinema.dtos.ScheduleDto;
+import cinema.dtos.SeatDto;
 import cinema.exception.CustomerException;
 import cinema.exception.MovieException;
 import cinema.exception.RecordNotFoundException;
@@ -19,9 +20,12 @@ import cinema.movie.service.MovieServiceImpl;
 import cinema.schedule.service.ScheduleService;
 import cinema.schedule.service.ScheduleServiceImpl;
 import cinema.seat.service.SeatService;
+import cinema.seat.service.SeatServiceImpl;
 import cinema.theater.service.TheaterService;
+import cinema.theater.service.TheaterServiceImpl;
 import cinema.ticket.service.TicketService;
 import cinema.ticket.service.TicketServiceImpl;
+import cinema.exception.TheaterException;
 
 public class CinemaUi {
 
@@ -50,9 +54,12 @@ public class CinemaUi {
 		CustomerSvc = new CustomerServiceImpl();
 		MovieSvc = new MovieServiceImpl();
 		ScheduleSvc = new ScheduleServiceImpl();
+		seatSvc = new SeatServiceImpl();
+		theaterSvc = new TheaterServiceImpl();
 	}
 
 	private void mainMenu() {
+		
 		System.out.println("메인메뉴: (1)로그인 (2)회원가입 (3)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
@@ -113,7 +120,7 @@ public class CinemaUi {
 		int menu = Integer.parseInt(sc.nextLine());
 
 		if (menu == 1) {
-			System.out.println("예매메뉴: (1)영화 목록보기 (2)영화 예매 (3)예매 취소 (4) 이전 메뉴");
+			System.out.println("예매메뉴: (1)영화 목록보기 (2)영화 예매 (3) 이전 메뉴");
 			System.out.print("메뉴 선택: ");
 			int movieMenu = Integer.parseInt(sc.nextLine());
 
@@ -132,11 +139,7 @@ public class CinemaUi {
 					System.out.println("결제하기로 넘어감");
 				}
 				member();
-
 			} else if (movieMenu == 3) {
-				System.out.println("예매 취소");
-				member();
-			} else if (movieMenu == 4) {
 				member();
 			} else {
 				System.out.println("비정상적인 접근입니다.");
@@ -159,7 +162,22 @@ public class CinemaUi {
 		int scnum = Integer.parseInt(sc.nextLine());
 		System.out.println("상영관번호를 입력해주세요.>> ");
 		int thnum = Integer.parseInt(sc.nextLine());
-
+		
+		//// 빈 좌석 출력
+		List<SeatDto> list = null;
+		try {
+			list = seatSvc.check(thnum);
+			System.out.println("예약 가능 좌석은");
+			System.out.println("상영관 | 좌석");
+			for(SeatDto dto : list) {
+				System.out.println(" "+
+						dto.getThnum()+"       "+
+						dto.getSeatnum()
+						);
+			}
+		} catch (TheaterException e) {
+			e.printStackTrace();
+		}
 		// 좌석번호 출력
 
 		System.out.println("좌석번호를 입력해주세요.>> ");
@@ -183,6 +201,7 @@ public class CinemaUi {
 	private void manager() {
 		System.out.println("관리자메뉴: (1)영화 관리 (2)상영일정 관리 (3)로그아웃 (4)종료");
 		System.out.print("메뉴 선택: ");
+		
 		int menu = Integer.parseInt(sc.nextLine());
 
 		if (menu == 1) {
