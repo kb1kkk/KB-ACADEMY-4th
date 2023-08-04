@@ -9,7 +9,7 @@ public interface TheaterService {
 	// 등록
 	public boolean add(TheaterDto dto) throws TheaterException;
 	// 확인
-	public boolean check() throws TheaterException, RecordNotFoundException;
+	public boolean check(int no) throws TheaterException, RecordNotFoundException;
 	
 	
 	

@@ -25,10 +25,10 @@ public class TheaterServiceImpl implements TheaterService {
 	}
 
 	@Override
-	public boolean check() throws TheaterException, RecordNotFoundException {
+	public boolean check(int no) throws TheaterException, RecordNotFoundException {
 		try {
 			System.out.println("조회하고 싶은 관");
-			TheaterDto check = theaterDao.check();
+			TheaterDto check = theaterDao.check(no);
 			if(check != null) {
 				return true;
 			} else {

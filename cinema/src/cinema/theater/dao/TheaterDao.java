@@ -9,6 +9,6 @@ public interface TheaterDao {
 	// 등록
 	public void add(TheaterDto dto) throws SQLException, DuplicatedIdException;
 	// 체크
-	public TheaterDto check() throws SQLException;
+	public TheaterDto check(int no) throws SQLException;
 	
 }
