@@ -3,7 +3,6 @@ package cinema.snack.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import cinema.dtos.SnackOrderDto;
 import cinema.exception.SnackException;
 import cinema.util.JdbcUtil;
