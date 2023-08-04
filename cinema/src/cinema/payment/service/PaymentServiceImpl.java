@@ -9,8 +9,12 @@ import cinema.exception.RecordNotFoundException;
 import cinema.exception.SnackException;
 import cinema.payment.dao.PaymentDao;
 import cinema.payment.dao.PaymentDaoImpl;
+import cinema.seat.dao.SeatDao;
+import cinema.seat.dao.SeatDaoImpl;
 import cinema.snack.dao.SnackOrderDao;
 import cinema.snack.dao.SnackOrderDaoImpl;
+import cinema.ticket.dao.TicketDao;
+import cinema.ticket.dao.TicketDaoImpl;
 
 public class PaymentServiceImpl implements PaymentService {
 

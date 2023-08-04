@@ -15,10 +15,12 @@ public interface SnackOrderDao {
     public SnackOrderDto getSnackOrder(SnackOrderDto dto)throws RecordNotFoundException, SQLException;
     
     //상태변화
-
 	public void changeSoStatus(int sonum) throws SnackException, SQLException;
-
-	int getPopSum() throws SnackException, SQLException;
-
-	int getBSum() throws SnackException, SQLException;
+	
+	//인기팝콘
+	public int getPopSum() throws SnackException, SQLException;
+	
+	//인기음료
+	public int getBSum() throws SnackException, SQLException;
+	
 }

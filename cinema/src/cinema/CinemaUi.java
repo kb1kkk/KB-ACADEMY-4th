@@ -526,7 +526,7 @@ public class CinemaUi {
 			}
 			int stcnt =(popcnt * popprice)+ (drinkprice * drinkcnt); // 간식 총금액
 			soDto = new SnackOrderDto(0,popcorn,popcnt,drink,drinkcnt,stcnt,curUser.getCnum(),0);
-			System.out.println("총 금액은 " +stcnt+" 입니다");
+			System.out.println("간식 총 금액은 " +stcnt+" 입니다");
 			try {
 				snackOrdSvc.add(soDto);
 				soDto = snackOrdSvc.getSnackOrder(soDto);
