@@ -21,8 +21,8 @@ public class PaymentDaoImpl implements PaymentDao {
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성
-			String sql = "INSERT INTO Payment(PNUM, CNUM, SONUM, TOTPRICE, PDAY)";
-			sql += "VALUES(PAYMENT_SEQ.NEXTVAL,?,?,?,SYSDATE)";
+			String sql = "INSERT INTO PAYMENT ";
+			sql += "VALUES (PAYMENT_SEQ.NEXTVAL,?,?,?,SYSDATE)";
 			
 			// 4. Statement 생성
 			ps = con.prepareStatement(sql);

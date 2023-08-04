@@ -28,7 +28,7 @@ public class TicketDaoImpl implements TicketDao {
 			// 5. 데이터 설정
 			ps.setInt(1, dto.getScnum());
 			ps.setInt(2, dto.getThnum());
-			ps.setInt(3, dto.getSeatnumber());
+			ps.setInt(3, dto.getSeatnum());
 			ps.setInt(4, dto.getCnum());
 			ps.setInt(5, dto.getTprice());
 			ps.setInt(6, dto.getPaystatus());
@@ -66,7 +66,7 @@ public class TicketDaoImpl implements TicketDao {
 			// 6. SQL 전송 및 결과 수신
 			// DML전송 : executeUpdate() : int 반환
 			// SELECT 전송 : executeQuery() : ResultSet 반환
-			ResultSet rs = ps.executeQuery(sql);
+			ResultSet rs = ps.executeQuery();
 			if(rs.next()){
 				int tnum = rs.getInt(1);
 				int scnum = rs.getInt(2);

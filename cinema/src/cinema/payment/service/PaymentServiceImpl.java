@@ -6,19 +6,24 @@ import java.util.List;
 import cinema.dtos.PaymentDto;
 import cinema.exception.PaymentException;
 import cinema.exception.RecordNotFoundException;
+import cinema.exception.SnackException;
 import cinema.payment.dao.PaymentDao;
 import cinema.payment.dao.PaymentDaoImpl;
+import cinema.snack.dao.SnackOrderDao;
+import cinema.snack.dao.SnackOrderDaoImpl;
 
 public class PaymentServiceImpl implements PaymentService {
 
 	PaymentDao paymentDao = new PaymentDaoImpl();
+	SnackOrderDao snackDao = new SnackOrderDaoImpl();
 	
 	@Override
 	public boolean getPay(PaymentDto pdto) throws PaymentException, RecordNotFoundException {
 		try {
 			paymentDao.add(pdto);
 			paymentDao.changeTicketStatus(pdto.getCnum());
-		} catch (SQLException e) {
+			snackDao.changeSoStatus(pdto.getSonum());
+		} catch (SQLException | SnackException e) {
 			e.printStackTrace();
 			throw new PaymentException(e.getMessage());
 		}
