@@ -39,12 +39,11 @@ public class TheaterDaoImpl implements TheaterDao {
 	}
 
 	@Override
-	public TheaterDto check() throws SQLException {
+	public TheaterDto check(int no) throws SQLException {
 		TheaterDto dto = null;
 		// DBMS연결
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		int no = sc.nextInt();
 		try {
 			con = JdbcUtil.connect();
 			// 3. SQL 작성

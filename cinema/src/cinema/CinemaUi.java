@@ -8,6 +8,8 @@ import cinema.dtos.CustomerDto;
 import cinema.exception.CustomerException;
 import cinema.dtos.TicketDto;
 import cinema.exception.TicketException;
+import cinema.seat.service.SeatService;
+import cinema.theater.service.TheaterService;
 import cinema.ticket.service.TicketService;
 import cinema.ticket.service.TicketServiceImpl;
 
@@ -15,6 +17,9 @@ public class CinemaUi {
 
 	private TicketService TicketSvc;
 	private CoustomerService CustomerSvc;
+	private SeatService seatSvc;
+	private TheaterService theaterSvc;
+	
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
