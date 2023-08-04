@@ -159,14 +159,14 @@ public class CinemaUi {
 	private void reservation() {
 		System.out.println("[영화 예매]");
 
-		// 상영일정 번호 출력
+		scheduleList();
 
 		System.out.println("상영일정번호를 입력해주세요.>> ");
 		int scnum = Integer.parseInt(sc.nextLine());
 		System.out.println("상영관번호를 입력해주세요.>> ");
 		int thnum = Integer.parseInt(sc.nextLine());
 		
-		//// 빈 좌석 출력
+		// 빈 좌석 출력
 		List<SeatDto> list = null;
 		try {
 			list = seatSvc.check(thnum);
@@ -359,22 +359,22 @@ public class CinemaUi {
 	}
 
 	// 전체 영화목록 출력
-	private void movieList() {
-		System.out.println("[영화 목록]");
-		System.out.println("-------------------------------------------------------------------------");
-		System.out.printf("%-6s%-20s%-12s%-16s%-16s\n", "번호", "영화제목", "러닝타임", "상영시작일자", "상영마감일자");
-		System.out.println("-------------------------------------------------------------------------");
-		List<MovieDto> list;
-		try {
-			list = MovieSvc.list();
-			for (MovieDto dto : list) {
-				System.out.printf("%-6s%-20s%-12s%-16s%-16s\n", dto.getMnum(), dto.getTitle(), dto.getRuntime(),
-						dto.getMstartdate(), dto.getMclosedate());
-			}
-		} catch (MovieException e) {
-			System.out.println("*** 서버에 오류가 발생했습니다 ***");
-		}
-	}
+    private void movieList() {
+        System.out.println("[영화 목록]");
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("%-8s%-14s\t%-12s%-16s%-16s\n", "영화번호", "영화제목", "러닝타임", "상영시작일자", "상영마감일자");
+        System.out.println("-------------------------------------------------------------------------");
+        List<MovieDto> list;
+        try {
+            list = MovieSvc.list();
+            for (MovieDto dto : list) {
+                System.out.printf("%-10s%-14s\t%-14s%-18s%-16s\n", dto.getMnum(), dto.getTitle(), dto.getRuntime(),
+                        dto.getMstartdate(), dto.getMclosedate());
+            }
+        } catch (MovieException e) {
+            System.out.println("*** 서버에 오류가 발생했습니다 ***");
+        }
+    }
 
 	// 영화 삭제
 	private void deleteMovie() {
@@ -392,21 +392,21 @@ public class CinemaUi {
 
 	// 전체 상영일정 출력
 	private void scheduleList() {
-		System.out.println("[상영 시간표]");
-		System.out.println("-------------------------------------------------------------------------");
-		System.out.printf("%-6s%-20s%-14s%-14s%-10s\n", "번호", "영화제목", "상영관번호", "상영일자", "시작시간");
-		System.out.println("-------------------------------------------------------------------------");
-		List<ScheduleDto> list;
-		try {
-			list = ScheduleSvc.list();
-			for (ScheduleDto dto : list) {
-				System.out.printf("%-6s%-20s%-14s%-14s%-10s\n", dto.getScnum(), dto.getMname(), dto.getThnum(),
-						dto.getScdate(), dto.getSctime());
-			}
-		} catch (ScheduleException e) {
-			System.out.println("*** 서버에 오류가 발생했습니다 ***");
-		}
-	}
+        System.out.println("[상영 시간표]");
+        System.out.println("-------------------------------------------------------------------------");
+        System.out.printf("%-10s%-12s\t%-14s%-14s\t%-10s\n", "상영일정번호", "영화제목", "상영관번호", "상영일자", "시작시간");
+        System.out.println("-------------------------------------------------------------------------");
+        List<ScheduleDto> list;
+        try {
+            list = ScheduleSvc.list();
+            for (ScheduleDto dto : list) {
+                System.out.printf("%-12s%-14s\t%-14s%-14s\t%-10s\n", dto.getScnum(), dto.getMname(), dto.getThnum(),
+                        dto.getScdate(), dto.getSctime());
+            }
+        } catch (ScheduleException e) {
+            System.out.println("*** 서버에 오류가 발생했습니다 ***");
+        }
+    }
 
 	// 상영일정 등록
 	private void addSchedule() {
