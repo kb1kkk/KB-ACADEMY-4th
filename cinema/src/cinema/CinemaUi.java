@@ -99,7 +99,7 @@ public class CinemaUi {
 		int menu = Integer.parseInt(sc.nextLine());
 
 		if (menu == 1) {
-			System.out.println("예매메뉴: (1)영화 목록보기 (2)영화 예매 (3)예매 취소 (4) 이전 메뉴");
+			System.out.println("예매메뉴: (1)영화 목록보기 (2)영화 예매 (3) 이전 메뉴");
 			System.out.print("메뉴 선택: ");
 			int movieMenu = Integer.parseInt(sc.nextLine());
 
@@ -118,11 +118,7 @@ public class CinemaUi {
 					System.out.println("결제하기로 넘어감");
 				}
 				member();
-
 			} else if (movieMenu == 3) {
-				System.out.println("예매 취소");
-				member();
-			} else if (movieMenu == 4) {
 				member();
 			} else {
 				System.out.println("비정상적인 접근입니다.");
