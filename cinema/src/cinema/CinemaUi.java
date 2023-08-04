@@ -94,7 +94,7 @@ public class CinemaUi {
 
 	// 회원 메뉴
 	private void member() {
-		System.out.println("회원메뉴: (1)예매 (2)이전메뉴 (3)종료");
+		System.out.println("회원메뉴: (1)예매 (2)로그아웃 (3)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
 
@@ -167,7 +167,7 @@ public class CinemaUi {
 
 	// 관리자 메뉴
 	private void manager() {
-		System.out.println("관리자메뉴: (1)영화 등록/삭제 (2)상영일정 등록/삭제 (3)이전메뉴 (4)종료");
+		System.out.println("관리자메뉴: (1)영화 등록/삭제 (2)상영일정 등록/삭제 (3)로그아웃 (4)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
 
