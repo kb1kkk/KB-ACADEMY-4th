@@ -25,8 +25,17 @@ public class TheaterServiceImpl implements TheaterService {
 	}
 
 	@Override
-	public boolean update(TheaterDto dto) throws TheaterException, RecordNotFoundException {
-		return false;
+	public boolean check(int no) throws TheaterException, RecordNotFoundException {
+		try {
+			System.out.println("조회하고 싶은 관");
+			TheaterDto check = theaterDao.check(no);
+			if(check != null) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			return false;
+		}
 	}
-
 }

@@ -1,4 +1,4 @@
-package cinema;
+package cinema.dtos;
 
 public class TicketDto {
 	private int tnum; // 티켓번호

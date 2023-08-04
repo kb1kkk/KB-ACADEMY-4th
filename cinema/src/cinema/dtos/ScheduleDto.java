@@ -6,6 +6,17 @@ public class ScheduleDto {
 	private String sctime;
 	private int mnum;
 	private int thnum;
+	private String mname;
+
+	public ScheduleDto(int scnum, String scdate, String sctime, int mnum, int thnum, String mname) {
+		super();
+		this.scnum = scnum;
+		this.scdate = scdate;
+		this.sctime = sctime;
+		this.mnum = mnum;
+		this.thnum = thnum;
+		this.mname = mname;
+	}
 
 	public ScheduleDto(int scnum, String scdate, String sctime, int mnum, int thnum) {
 		super();
@@ -14,6 +25,15 @@ public class ScheduleDto {
 		this.sctime = sctime;
 		this.mnum = mnum;
 		this.thnum = thnum;
+		this.mname = null;
+	}
+
+	public String getMname() {
+		return mname;
+	}
+
+	public void setMname(String mname) {
+		this.mname = mname;
 	}
 
 	public int getScnum() {
