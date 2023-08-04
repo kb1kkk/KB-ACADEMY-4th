@@ -1,5 +1,6 @@
-package cinema;
+package cinema.ticket.service;
 
+import cinema.dtos.TicketDto;
 import cinema.exception.TicketException;
 
 public interface TicketService {
