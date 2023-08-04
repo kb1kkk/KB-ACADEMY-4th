@@ -47,7 +47,7 @@ public class CinemaUi {
 
 	private static Scanner sc = new Scanner(System.in);
 	private CustomerDto curUser = null;
-	
+
 	public static void main(String[] args) {
 		new CinemaUi().go();
 	}
@@ -71,7 +71,7 @@ public class CinemaUi {
 	}
 
 	private void mainMenu() {
-		
+
 		System.out.println("메인메뉴: (1)로그인 (2)회원가입 (3)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
@@ -92,7 +92,6 @@ public class CinemaUi {
 				System.out.println("[로그인 성공]");
 				isManager = user.getCnum();
 				curUser = user;
-				System.out.println(curUser);
 			} else {
 				System.out.println("아이디 또는 비밀번호가 일치하지 않습니다");
 				return;
@@ -107,11 +106,15 @@ public class CinemaUi {
 		} else if (menu == 2) {
 			signUpMenu();
 		} else if (menu == 3) {
-			user = null;
+			reset();
 			System.exit(0);
 		} else {
 			System.out.println("비정상적인 접근입니다.");
 		}
+	}
+
+	private void reset() {
+		curUser = null;
 	}
 
 	// 로그인 처리 함수
@@ -139,7 +142,7 @@ public class CinemaUi {
 			int movieMenu = Integer.parseInt(sc.nextLine());
 
 			if (movieMenu == 1) {
-				System.out.println("영화 목록출력");
+				movieList();
 				member();
 			} else if (movieMenu == 2) {
 				reservation();
@@ -159,8 +162,10 @@ public class CinemaUi {
 				System.out.println("비정상적인 접근입니다.");
 			}
 		} else if (menu == 2) {
+			reset();
 			return;
 		} else if (menu == 3) {
+			reset();
 			System.exit(0);
 		} else {
 			System.out.println("비정상적인 접근입니다.");
@@ -176,18 +181,15 @@ public class CinemaUi {
 		int scnum = Integer.parseInt(sc.nextLine());
 		System.out.println("상영관번호를 입력해주세요.>> ");
 		int thnum = Integer.parseInt(sc.nextLine());
-		
+
 		// 빈 좌석 출력
 		List<SeatDto> list = null;
 		try {
 			list = seatSvc.check(thnum);
 			System.out.println("예약 가능 좌석은");
 			System.out.println("상영관 | 좌석");
-			for(SeatDto dto : list) {
-				System.out.println(" "+
-						dto.getThnum()+"       "+
-						dto.getSeatnum()
-						);
+			for (SeatDto dto : list) {
+				System.out.println(" " + dto.getThnum() + "       " + dto.getSeatnum());
 			}
 		} catch (TheaterException e) {
 			e.printStackTrace();
@@ -200,7 +202,6 @@ public class CinemaUi {
 		// 좌석status가 0일떄
 		int ticketPrice = 120000;
 		// 현재 회원 정보 가져오기
-		System.out.println(curUser);
 		int cnum = curUser.getCnum();
 		TicketDto dto = new TicketDto(0, scnum, thnum, seatnumber, cnum, ticketPrice, 0);
 
@@ -216,7 +217,7 @@ public class CinemaUi {
 	private void manager() {
 		System.out.println("관리자메뉴: (1)영화 관리 (2)상영일정 관리 (3)로그아웃 (4)종료");
 		System.out.print("메뉴 선택: ");
-		
+
 		int menu = Integer.parseInt(sc.nextLine());
 
 		if (menu == 1) {
@@ -261,8 +262,10 @@ public class CinemaUi {
 				System.out.println("비정상적인 접근입니다.");
 			}
 		} else if (menu == 3) {
+			reset();
 			return;
 		} else if (menu == 4) {
+			reset();
 			System.exit(0);
 		} else {
 			System.out.println("비정상적인 접근입니다.");
@@ -327,117 +330,111 @@ public class CinemaUi {
 			System.out.println("회원 정보를 찾을 수 없습니다");
 		}
 	}
-	
-	//팝콘메뉴출력
+
+	// 팝콘메뉴출력
 	private List<SnackDto> popMenu() {
 		List<SnackDto> list = null;
 		System.out.println("** 팝콘목록 **");
-		System.out.printf("%-6s%-10s%-16s%-10s\n","번호", "종류","이름 ","가격");
+		System.out.printf("%-6s%-10s%-16s%-10s\n", "번호", "종류", "이름 ", "가격");
 		System.out.println("-------------------------------------------");
 		try {
 			list = snackSvc.list();
-			for (int i=0;i<3;i++) {
-				System.out.printf("%-7s%-10s%-15s%-10s\n",
-						list.get(i).getSnum(),
-						list.get(i).getStype(),
-						list.get(i).getSname(),
-						list.get(i).getSprice());
+			for (int i = 0; i < 3; i++) {
+				System.out.printf("%-7s%-10s%-15s%-10s\n", list.get(i).getSnum(), list.get(i).getStype(),
+						list.get(i).getSname(), list.get(i).getSprice());
 			}
 		} catch (SnackException e) {
 			System.out.println("*** 서버에 오류가 발생했습니다 ***");
 		}
 		return list;
 	}
-	
-	//음료메뉴출력
+
+	// 음료메뉴출력
 	private void drinkMenu(List<SnackDto> list) {
 		System.out.println("음료는 어떤걸 사시겠습니까?");
-		System.out.printf("%-6s%-10s%-16s%-10s\n","번호", "종류","이름 ","가격");
+		System.out.printf("%-6s%-10s%-16s%-10s\n", "번호", "종류", "이름 ", "가격");
 		System.out.println("-------------------------------------------");
-		for (int i=3;i<6;i++) {
-			System.out.printf("%-7s%-10s%-15s%-10s\n",
-					i-2,
-					list.get(i).getStype(),
-					list.get(i).getSname(),
+		for (int i = 3; i < 6; i++) {
+			System.out.printf("%-7s%-10s%-15s%-10s\n", i - 2, list.get(i).getStype(), list.get(i).getSname(),
 					list.get(i).getSprice());
 
 		}
 	}
-	
-	// 간식메뉴
-		private void snack() {
-			List<SnackDto> list = popMenu();
-			int popcorn = 0;
-			int popcnt = 0;
-			while (true) {
-				System.out.println("팝콘은 어떤걸 사시겠습니까?");
-				popcorn = Integer.parseInt(sc.nextLine());
-				if(popcorn == 0){
-					System.out.println("팝콘을 선택안하셨습니다");
-					break;
-				}else if (popcorn == 1) {
-					System.out.println("일반 팝콘");
-					break;
-				} else if (popcorn == 2) {
-					System.out.println("카라멜 팝콘");
-					break;
-				} else if (popcorn == 3) {
-					System.out.println("치즈맛 팝콘");
-					break;
-				} else {
-					System.out.println("팝콘을 선택해주세요.");
-					continue;
-				}
-			}
-			System.out.println("팝콘수량은 몇개가 필요한가요?");
-			popcnt = Integer.parseInt(sc.nextLine());
-			int drink =0;
-			int drinkcnt = 0;
-			while(true){
-				drinkMenu(list);
-				drink = Integer.parseInt(sc.nextLine());
-				if(drink == 0){
-					System.out.println("음료를 선택안하셨습니다");
-					break;
-				}else if (drink == 1) {
-					drink = 4;
-					System.out.println("콜라");
-					break;
-				} else if (drink == 2) {
-					drink = 5;
-					System.out.println("사이다");
-					break;
-				} else if (drink == 3) {
-					drink = 6;
-					System.out.println("오렌지주스");
-					break;
-				} else {
-					System.out.println("음료를 선택해주세요.");
-					continue;
-				}
-			}
-			System.out.println("음료수량은 몇개가 필요한가요?");
-			drinkcnt = Integer.parseInt(sc.nextLine());
-			snackOrdSvc = new SnackOrderServiceImpl();
-			SnackOrderDto sdto = null;
 
-			int popprice =0;
-			int drinkprice =0;
-			try {
-				popprice = snackSvc.getPrice(popcorn);
-				drinkprice = snackSvc.getPrice(drink);
-			} catch (SnackException e) {
-				throw new RuntimeException(e);
-			}
-			int stcnt =(popcnt * popprice)+ (drinkprice * drinkcnt); // 간식 총금액
-			sdto = new SnackOrderDto(0,popcorn,popcnt,drink,drinkcnt,stcnt);
-			System.out.println("총 금액은 " +stcnt+" 입니다");
-			try {
-				snackOrdSvc.add(sdto);
-			} catch (SnackException e) {
-				throw new RuntimeException(e);
+	// 간식메뉴
+	private void snack() {
+		List<SnackDto> list = popMenu();
+		int popcorn = 0;
+		int popcnt = 0;
+		while (true) {
+			System.out.println("팝콘은 어떤걸 사시겠습니까?");
+			popcorn = Integer.parseInt(sc.nextLine());
+			if (popcorn == 0) {
+				System.out.println("팝콘을 선택안하셨습니다");
+				break;
+			} else if (popcorn == 1) {
+				System.out.println("일반 팝콘");
+				break;
+			} else if (popcorn == 2) {
+				System.out.println("카라멜 팝콘");
+				break;
+			} else if (popcorn == 3) {
+				System.out.println("치즈맛 팝콘");
+				break;
+			} else {
+				System.out.println("팝콘을 선택해주세요.");
+				continue;
 			}
 		}
+		System.out.println("팝콘수량은 몇개가 필요한가요?");
+		popcnt = Integer.parseInt(sc.nextLine());
+		int drink = 0;
+		int drinkcnt = 0;
+		while (true) {
+			drinkMenu(list);
+			drink = Integer.parseInt(sc.nextLine());
+			if (drink == 0) {
+				System.out.println("음료를 선택안하셨습니다");
+				break;
+			} else if (drink == 1) {
+				drink = 4;
+				System.out.println("콜라");
+				break;
+			} else if (drink == 2) {
+				drink = 5;
+				System.out.println("사이다");
+				break;
+			} else if (drink == 3) {
+				drink = 6;
+				System.out.println("오렌지주스");
+				break;
+			} else {
+				System.out.println("음료를 선택해주세요.");
+				continue;
+			}
+		}
+		System.out.println("음료수량은 몇개가 필요한가요?");
+		drinkcnt = Integer.parseInt(sc.nextLine());
+		snackOrdSvc = new SnackOrderServiceImpl();
+		SnackOrderDto sdto = null;
+
+		int popprice = 0;
+		int drinkprice = 0;
+		try {
+			popprice = snackSvc.getPrice(popcorn);
+			drinkprice = snackSvc.getPrice(drink);
+		} catch (SnackException e) {
+			throw new RuntimeException(e);
+		}
+		int stcnt = (popcnt * popprice) + (drinkprice * drinkcnt); // 간식 총금액
+		sdto = new SnackOrderDto(0, popcorn, popcnt, drink, drinkcnt, stcnt);
+		System.out.println("총 금액은 " + stcnt + " 입니다");
+		try {
+			snackOrdSvc.add(sdto);
+		} catch (SnackException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	// 영화 추가
 	private void addMovie() {
@@ -460,22 +457,22 @@ public class CinemaUi {
 	}
 
 	// 전체 영화목록 출력
-    private void movieList() {
-        System.out.println("[영화 목록]");
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("%-8s%-14s\t%-12s%-16s%-16s\n", "영화번호", "영화제목", "러닝타임", "상영시작일자", "상영마감일자");
-        System.out.println("-------------------------------------------------------------------------");
-        List<MovieDto> list;
-        try {
-            list = MovieSvc.list();
-            for (MovieDto dto : list) {
-                System.out.printf("%-10s%-14s\t%-14s%-18s%-16s\n", dto.getMnum(), dto.getTitle(), dto.getRuntime(),
-                        dto.getMstartdate(), dto.getMclosedate());
-            }
-        } catch (MovieException e) {
-            System.out.println("*** 서버에 오류가 발생했습니다 ***");
-        }
-    }
+	private void movieList() {
+		System.out.println("[영화 목록]");
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.printf("%-8s%-14s\t%-12s%-16s%-16s\n", "영화번호", "영화제목", "러닝타임", "상영시작일자", "상영마감일자");
+		System.out.println("-------------------------------------------------------------------------");
+		List<MovieDto> list;
+		try {
+			list = MovieSvc.list();
+			for (MovieDto dto : list) {
+				System.out.printf("%-10s%-14s\t%-14s%-18s%-16s\n", dto.getMnum(), dto.getTitle(), dto.getRuntime(),
+						dto.getMstartdate(), dto.getMclosedate());
+			}
+		} catch (MovieException e) {
+			System.out.println("*** 서버에 오류가 발생했습니다 ***");
+		}
+	}
 
 	// 영화 삭제
 	private void deleteMovie() {
@@ -493,21 +490,21 @@ public class CinemaUi {
 
 	// 전체 상영일정 출력
 	private void scheduleList() {
-        System.out.println("[상영 시간표]");
-        System.out.println("-------------------------------------------------------------------------");
-        System.out.printf("%-10s%-12s\t%-14s%-14s\t%-10s\n", "상영일정번호", "영화제목", "상영관번호", "상영일자", "시작시간");
-        System.out.println("-------------------------------------------------------------------------");
-        List<ScheduleDto> list;
-        try {
-            list = ScheduleSvc.list();
-            for (ScheduleDto dto : list) {
-                System.out.printf("%-12s%-14s\t%-14s%-14s\t%-10s\n", dto.getScnum(), dto.getMname(), dto.getThnum(),
-                        dto.getScdate(), dto.getSctime());
-            }
-        } catch (ScheduleException e) {
-            System.out.println("*** 서버에 오류가 발생했습니다 ***");
-        }
-    }
+		System.out.println("[상영 시간표]");
+		System.out.println("-------------------------------------------------------------------------");
+		System.out.printf("%-10s%-12s\t%-14s%-14s\t%-10s\n", "상영일정번호", "영화제목", "상영관번호", "상영일자", "시작시간");
+		System.out.println("-------------------------------------------------------------------------");
+		List<ScheduleDto> list;
+		try {
+			list = ScheduleSvc.list();
+			for (ScheduleDto dto : list) {
+				System.out.printf("%-12s%-14s\t%-14s%-14s\t%-10s\n", dto.getScnum(), dto.getMname(), dto.getThnum(),
+						dto.getScdate(), dto.getSctime());
+			}
+		} catch (ScheduleException e) {
+			System.out.println("*** 서버에 오류가 발생했습니다 ***");
+		}
+	}
 
 	// 상영일정 등록
 	private void addSchedule() {
