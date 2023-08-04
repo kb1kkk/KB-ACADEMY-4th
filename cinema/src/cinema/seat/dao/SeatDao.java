@@ -10,6 +10,6 @@ public interface SeatDao {
 	// 등록
 	public void add(SeatDto dto) throws SQLException, DuplicatedIdException;
 	// 남는 자리
-	public List<SeatDto> list() throws SQLException;
+	public List<SeatDto> list(int thnum) throws SQLException;
 	
 }

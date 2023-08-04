@@ -1,17 +1,22 @@
 package cinema;
 
+import java.util.List;
 import java.util.Scanner;
 
 import cinema.customer.service.CoustomerService;
 import cinema.customer.service.CustomerServiceImpl;
 import cinema.dtos.CustomerDto;
+import cinema.dtos.SeatDto;
 import cinema.exception.CustomerException;
 import cinema.dtos.TicketDto;
 import cinema.exception.TicketException;
 import cinema.seat.service.SeatService;
+import cinema.seat.service.SeatServiceImpl;
 import cinema.theater.service.TheaterService;
+import cinema.theater.service.TheaterServiceImpl;
 import cinema.ticket.service.TicketService;
 import cinema.ticket.service.TicketServiceImpl;
+import cinema.exception.TheaterException;
 
 public class CinemaUi {
 
@@ -36,9 +41,12 @@ public class CinemaUi {
 	public void init() {
 		TicketSvc = new TicketServiceImpl();
 		CustomerSvc = new CustomerServiceImpl();
+		seatSvc = new SeatServiceImpl();
+		theaterSvc = new TheaterServiceImpl();
 	}
 
 	private void mainMenu() {
+		
 		System.out.println("메인메뉴: (1)로그인 (2)회원가입 (3)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
@@ -137,6 +145,24 @@ public class CinemaUi {
 		System.out.println("상영관번호를 입력해주세요.>> ");
 		int thnum = Integer.parseInt(sc.nextLine());
 		
+		//// 빈 좌석 출력
+		
+		List<SeatDto> list = null;
+		try {
+			list = seatSvc.check(thnum);
+			System.out.println("예약 가능 좌석은");
+			System.out.println("상영관 | 좌석");
+			for(SeatDto dto : list) {
+				System.out.println(" "+
+						dto.getThnum()+"       "+
+						dto.getSeatnum()
+						);
+			}
+		} catch (TheaterException e) {
+			e.printStackTrace();
+		}
+		
+		
 		// 좌석번호 출력
 		
 		System.out.println("좌석번호를 입력해주세요.>> ");
@@ -160,6 +186,7 @@ public class CinemaUi {
 	private void manager() {
 		System.out.println("관리자메뉴: (1)영화 등록/삭제 (2)상영일정 등록/삭제 (3)이전메뉴 (4)종료");
 		System.out.print("메뉴 선택: ");
+		
 		int menu = Integer.parseInt(sc.nextLine());
 
 		if (menu == 1) {
