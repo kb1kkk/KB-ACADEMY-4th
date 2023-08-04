@@ -41,11 +41,9 @@ public class SeatDaoImpl implements SeatDao {
 	}
 
 	@Override
-	public List<SeatDto> list() throws SQLException {
+	public List<SeatDto> list(int thnum) throws SQLException {
 		List<SeatDto> result = new ArrayList<SeatDto>();
 		//DBMS연결
-		System.out.println("조회하고 싶은 상영관은?");
-		int thhnum = sc.nextInt();	// 상영관 받기
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -55,12 +53,12 @@ public class SeatDaoImpl implements SeatDao {
 			// 4. Statement 생성
 			pstmt = con.prepareStatement(sql);
 			// 5. 데이터 설정
-			pstmt.setInt(1, thhnum);
+			pstmt.setInt(1, thnum);
 			// 6. SQL 전송, 결과수신
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {//조회결과가 있다
 				int seatnum = rs.getInt("seatnum");
-				int thnum = rs.getInt("thnum");
+				thnum = rs.getInt("thnum");
 				int seatstatus = rs.getInt("seatstatus");
 				SeatDto dto = new SeatDto(seatnum, thnum, seatstatus);
 				result.add(dto);
