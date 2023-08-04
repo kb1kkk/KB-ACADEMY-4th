@@ -51,31 +51,34 @@ public class CinemaUi {
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
 		CustomerDto user = null;
-		
+
 		if (menu == 1) {
 			System.out.print("아이디를 입력하세요: ");
 			String id = sc.nextLine();
+			System.out.print("비밀번호를 입력하세요: ");
+			String cpw = sc.nextLine();
 			user = login(id);
 			int isManager = 0;
 			
-			if(user == null) {
+			if (user == null) {
 				System.out.println("아이디가 존재하지 않습니다");
 				return;
-			}  else {
+			} else if (user.getCpw().equals(cpw) == true) {
+				System.out.println("[로그인 성공]");
 				isManager = user.getCnum();
+			} else {
+				System.out.println("아이디 또는 비밀번호가 일치하지 않습니다");
+				return;
 			}
+
 			// cNum이 1000인 경우 관리자
-			if(isManager == 1000) {
+			if (isManager == 1000) {
 				manager();
 			} else {
 				member();
 			}
 		} else if (menu == 2) {
-			member();
-		} else if (menu == 3) {
 			signUpMenu();
-		} else if (menu == 4) {
-			signUp();
 		} else if (menu == 3) {
 			user = null;
 			System.exit(0);
@@ -84,16 +87,22 @@ public class CinemaUi {
 		}
 	}
 
+	// 로그인 처리 함수
 	private CustomerDto login(String id) {
 		CustomerDto dto = null;
-		//dto = CustomerSvc.findById(id);
+		try {
+			dto = CustomerSvc.findById(id);
+		} catch (CustomerException e) {
+			System.out.println("로그인 오류");
+			e.printStackTrace();
+		}
 
 		return dto;
 	}
 
 	// 회원 메뉴
 	private void member() {
-		System.out.println("회원메뉴: (1)예매 (2)이전메뉴 (3)종료");
+		System.out.println("회원메뉴: (1)예매 (2)로그아웃 (3)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
 
@@ -112,12 +121,12 @@ public class CinemaUi {
 				int snackStatus = Integer.parseInt(sc.nextLine());
 				if (snackStatus == 1) {
 					snack();
-					
+
 				} else if (snackStatus == 2) {
 					System.out.println("결제하기로 넘어감");
-				} 
+				}
 				member();
-				
+
 			} else if (movieMenu == 3) {
 				System.out.println("예매 취소");
 				member();
@@ -137,16 +146,15 @@ public class CinemaUi {
 
 	private void reservation() {
 		System.out.println("[영화 예매]");
-		
+
 		// 상영일정 번호 출력
-		
+
 		System.out.println("상영일정번호를 입력해주세요.>> ");
 		int scnum = Integer.parseInt(sc.nextLine());
 		System.out.println("상영관번호를 입력해주세요.>> ");
 		int thnum = Integer.parseInt(sc.nextLine());
 		
 		//// 빈 좌석 출력
-		
 		List<SeatDto> list = null;
 		try {
 			list = seatSvc.check(thnum);
@@ -161,19 +169,17 @@ public class CinemaUi {
 		} catch (TheaterException e) {
 			e.printStackTrace();
 		}
-		
-		
 		// 좌석번호 출력
-		
+
 		System.out.println("좌석번호를 입력해주세요.>> ");
 		int seatnumber = Integer.parseInt(sc.nextLine());
-		
+
 		// 좌석status가 0일떄
 		int ticketPrice = 120000;
 		// 현재 회원 정보 가져오기
 		int cnum = 1;
 		TicketDto dto = new TicketDto(0, scnum, thnum, seatnumber, cnum, ticketPrice, 0);
-		
+
 		try {
 			TicketSvc.add(dto);
 		} catch (TicketException e) {
@@ -184,7 +190,7 @@ public class CinemaUi {
 
 	// 관리자 메뉴
 	private void manager() {
-		System.out.println("관리자메뉴: (1)영화 등록/삭제 (2)상영일정 등록/삭제 (3)이전메뉴 (4)종료");
+		System.out.println("관리자메뉴: (1)영화 등록/삭제 (2)상영일정 등록/삭제 (3)로그아웃 (4)종료");
 		System.out.print("메뉴 선택: ");
 		
 		int menu = Integer.parseInt(sc.nextLine());
@@ -250,6 +256,7 @@ public class CinemaUi {
 			System.out.println("비정상적인 접근입니다.");
 		}
 	}
+
 	// 회원가입
 	private void signUp() {
 		System.out.println("** 회원 가입 **");
@@ -271,35 +278,36 @@ public class CinemaUi {
 			e.printStackTrace();
 		}
 	}
-	//회원탈퇴
+
+	// 회원탈퇴
 	private void withdraw() {
 		CustomerDto dto = null;
-		
+
 		System.out.println("** 탈퇴하기 **");
 		System.out.println("사용자의 아이디를 입력하세요>> ");
 		String cid = sc.nextLine();
-		
+
 		System.out.println("사용자의 비밀번호를 입력하세요>>");
 		String cpw = sc.nextLine();
-		
-		try { 
+
+		try {
 			dto = CustomerSvc.findById(cid);
-			System.out.println(dto.getCpw());
-			if(dto.getCpw().equals(cpw) == true) {
+			if (dto.getCpw().equals(cpw) == true) {
 				System.out.println("탈퇴완료");
 				CustomerSvc.delete(dto.getCnum());
 			}
-		}catch(CustomerException e) {
+		} catch (CustomerException e) {
 			System.out.println("회원 정보를 찾을 수 없습니다");
 		}
 	}
+
 	// 간식메뉴
 	private void snack() {
 		while (true) {
 			System.out.println("간식 메뉴: (1)간식 목록 (2)간식 구매 (3) 간식구매 종료");
 			System.out.print("메뉴 선택: ");
 			int snackMenu = Integer.parseInt(sc.nextLine());
-			
+
 			if (snackMenu == 1) {
 				System.out.println("간식 목록");
 			} else if (snackMenu == 2) {
