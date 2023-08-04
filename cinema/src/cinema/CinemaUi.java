@@ -7,6 +7,7 @@ import cinema.customer.service.CoustomerService;
 import cinema.customer.service.CustomerServiceImpl;
 import cinema.dtos.CustomerDto;
 import cinema.dtos.MovieDto;
+import cinema.dtos.PaymentDto;
 import cinema.dtos.ScheduleDto;
 import cinema.dtos.SeatDto;
 import cinema.dtos.SnackDto;
@@ -21,6 +22,8 @@ import cinema.exception.TheaterException;
 import cinema.exception.TicketException;
 import cinema.movie.service.MovieService;
 import cinema.movie.service.MovieServiceImpl;
+import cinema.payment.service.PaymentService;
+import cinema.payment.service.PaymentServiceImpl;
 import cinema.schedule.service.ScheduleService;
 import cinema.schedule.service.ScheduleServiceImpl;
 import cinema.seat.service.SeatService;
@@ -44,9 +47,11 @@ public class CinemaUi {
 	private ScheduleService ScheduleSvc;
 	private SnackService snackSvc;
 	private SnackOrderService snackOrdSvc;
+	private PaymentService paymentSvc;
 
 	private static Scanner sc = new Scanner(System.in);
 	private CustomerDto curUser = null;
+	private SnackOrderDto soDto = null;
 	
 	public static void main(String[] args) {
 		new CinemaUi().go();
@@ -68,6 +73,7 @@ public class CinemaUi {
 		theaterSvc = new TheaterServiceImpl();
 		snackSvc = new SnackServiceImpl();
 		snackOrdSvc = new SnackOrderServiceImpl();
+		paymentSvc = new PaymentServiceImpl();
 	}
 
 	private void mainMenu() {
@@ -92,7 +98,6 @@ public class CinemaUi {
 				System.out.println("[로그인 성공]");
 				isManager = user.getCnum();
 				curUser = user;
-				System.out.println(curUser);
 			} else {
 				System.out.println("아이디 또는 비밀번호가 일치하지 않습니다");
 				return;
@@ -148,7 +153,7 @@ public class CinemaUi {
 				int snackStatus = Integer.parseInt(sc.nextLine());
 				if (snackStatus == 1) {
 					snack();
-
+					payment();
 				} else if (snackStatus == 2) {
 					System.out.println("결제하기로 넘어감");
 				}
@@ -165,6 +170,26 @@ public class CinemaUi {
 		} else {
 			System.out.println("비정상적인 접근입니다.");
 		}
+	}
+
+	private void payment() {
+		TicketDto ticket = null;
+		ScheduleDto schedule = null;
+		try {
+			ticket = TicketSvc.getTicketByCnum(curUser.getCnum());
+		} catch (TicketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		PaymentDto payResult = new PaymentDto();
+		System.out.println(" *** 결제내역 **** ");
+		System.out.println(" 회원 아이디 : "+curUser.getCid());
+		System.out.println(" 영화 제목 : ");
+		System.out.println(" 영화 상영관 : "+ticket.getThnum()+"관");
+		System.out.println(" 좌석 번호 : "+ticket.getSeatnum()+"번 좌석");
+		System.out.println(" 영화 상영일정 : "+ticket.getThnum()+"관");
+		
+		
 	}
 
 	private void reservation() {
@@ -419,7 +444,6 @@ public class CinemaUi {
 			System.out.println("음료수량은 몇개가 필요한가요?");
 			drinkcnt = Integer.parseInt(sc.nextLine());
 			snackOrdSvc = new SnackOrderServiceImpl();
-			SnackOrderDto sdto = null;
 
 			int popprice =0;
 			int drinkprice =0;
@@ -427,15 +451,13 @@ public class CinemaUi {
 				popprice = snackSvc.getPrice(popcorn);
 				drinkprice = snackSvc.getPrice(drink);
 			} catch (SnackException e) {
-				throw new RuntimeException(e);
 			}
 			int stcnt =(popcnt * popprice)+ (drinkprice * drinkcnt); // 간식 총금액
-			sdto = new SnackOrderDto(0,popcorn,popcnt,drink,drinkcnt,stcnt);
+			soDto = new SnackOrderDto(0,popcorn,popcnt,drink,drinkcnt,stcnt);
 			System.out.println("총 금액은 " +stcnt+" 입니다");
 			try {
-				snackOrdSvc.add(sdto);
+				snackOrdSvc.add(soDto);
 			} catch (SnackException e) {
-				throw new RuntimeException(e);
 			}
 		}
 

@@ -4,7 +4,7 @@ public class TicketDto {
 	private int tnum; // 티켓번호
 	private int scnum; // 상영일정번호
 	private int thnum; // 상영관번호
-	private int seatnumber; // 좌석번호
+	private int seatnum; // 좌석번호
 	private int cnum; //회원번호
 	private int tprice; // 가격
 	private int paystatus; //결제유무
@@ -17,7 +17,7 @@ public class TicketDto {
 		this.tnum = tnum;
 		this.scnum = scnum;
 		this.thnum = thnum;
-		this.seatnumber = seatnumber;
+		this.seatnum = seatnumber;
 		this.cnum = cnum;
 		this.tprice = tprice;
 		this.paystatus = paystatus;
@@ -47,12 +47,12 @@ public class TicketDto {
 		this.thnum = thnum;
 	}
 
-	public int getSeatnumber() {
-		return seatnumber;
+	public int getSeatnum() {
+		return seatnum;
 	}
 
-	public void setSeatnumber(int seatnumber) {
-		this.seatnumber = seatnumber;
+	public void setSeatnum(int seatnumber) {
+		this.seatnum = seatnumber;
 	}
 
 	public int getCnum() {
@@ -81,7 +81,7 @@ public class TicketDto {
 
 	@Override
 	public String toString() {
-		return "TiketDto [tnum=" + tnum + ", scnum=" + scnum + ", thnum=" + thnum + ", seatnumber=" + seatnumber
+		return "TiketDto [tnum=" + tnum + ", scnum=" + scnum + ", thnum=" + thnum + ", seatnumber=" + seatnum
 				+ ", cnum=" + cnum + ", tprice=" + tprice + ", paystatus=" + paystatus + "]";
 	}
 	
