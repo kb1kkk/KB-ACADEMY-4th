@@ -1,8 +1,8 @@
-package cinema.dao;
+package cinema.ticket.dao;
 
 import java.sql.SQLException;
 
-import cinema.TicketDto;
+import cinema.dtos.TicketDto;
 import cinema.exception.DuplicatedIdException;
 
 public interface TicketDao {

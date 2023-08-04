@@ -6,6 +6,10 @@ import cinema.customer.service.CoustomerService;
 import cinema.customer.service.CustomerServiceImpl;
 import cinema.dtos.CustomerDto;
 import cinema.exception.CustomerException;
+import cinema.dtos.TicketDto;
+import cinema.exception.TicketException;
+import cinema.ticket.service.TicketService;
+import cinema.ticket.service.TicketServiceImpl;
 
 public class CinemaUi {
 
@@ -30,21 +34,48 @@ public class CinemaUi {
 	}
 
 	private void mainMenu() {
-		System.out.println("메인메뉴: (1)관리자 (2)회원 (3)회원가입 (4)종료");
+		System.out.println("메인메뉴: (1)로그인 (2)회원가입 (3)종료");
 		System.out.print("메뉴 선택: ");
 		int menu = Integer.parseInt(sc.nextLine());
-
+		CustomerDto user = null;
+		
 		if (menu == 1) {
-			manager();
+			System.out.print("아이디를 입력하세요: ");
+			String id = sc.nextLine();
+			user = login(id);
+			int isManager = 0;
+			
+			if(user == null) {
+				System.out.println("아이디가 존재하지 않습니다");
+				return;
+			}  else {
+				isManager = user.getCnum();
+			}
+			// cNum이 1000인 경우 관리자
+			if(isManager == 1000) {
+				manager();
+			} else {
+				member();
+			}
 		} else if (menu == 2) {
 			member();
 		} else if (menu == 3) {
 			signUpMenu();
 		} else if (menu == 4) {
+			signUp();
+		} else if (menu == 3) {
+			user = null;
 			System.exit(0);
 		} else {
 			System.out.println("비정상적인 접근입니다.");
 		}
+	}
+
+	private CustomerDto login(String id) {
+		CustomerDto dto = null;
+		//dto = CustomerSvc.findById(id);
+
+		return dto;
 	}
 
 	// 회원 메뉴
@@ -62,8 +93,7 @@ public class CinemaUi {
 				System.out.println("영화 목록출력");
 				member();
 			} else if (movieMenu == 2) {
-				System.out.println("영화 예매 완료");
-
+				reservation();
 				System.out.println("간식을 구매하시겠습니까? (1) 예 (2) 아니오");
 				System.out.print("메뉴 선택: ");
 				int snackStatus = Integer.parseInt(sc.nextLine());
@@ -89,6 +119,35 @@ public class CinemaUi {
 			System.exit(0);
 		} else {
 			System.out.println("비정상적인 접근입니다.");
+		}
+	}
+
+	private void reservation() {
+		System.out.println("[영화 예매]");
+		
+		// 상영일정 번호 출력
+		
+		System.out.println("상영일정번호를 입력해주세요.>> ");
+		int scnum = Integer.parseInt(sc.nextLine());
+		System.out.println("상영관번호를 입력해주세요.>> ");
+		int thnum = Integer.parseInt(sc.nextLine());
+		
+		// 좌석번호 출력
+		
+		System.out.println("좌석번호를 입력해주세요.>> ");
+		int seatnumber = Integer.parseInt(sc.nextLine());
+		
+		// 좌석status가 0일떄
+		int ticketPrice = 120000;
+		// 현재 회원 정보 가져오기
+		int cnum = 1;
+		TicketDto dto = new TicketDto(0, scnum, thnum, seatnumber, cnum, ticketPrice, 0);
+		
+		try {
+			TicketSvc.add(dto);
+		} catch (TicketException e) {
+			System.out.println("티켓 등록 오류");
+			e.printStackTrace();
 		}
 	}
 

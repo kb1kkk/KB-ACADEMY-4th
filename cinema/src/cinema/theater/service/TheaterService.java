@@ -8,8 +8,8 @@ import cinema.exception.TheaterException;
 public interface TheaterService {
 	// 등록
 	public boolean add(TheaterDto dto) throws TheaterException;
-	// 수정
-	public boolean update(TheaterDto dto) throws TheaterException, RecordNotFoundException;
+	// 확인
+	public boolean check() throws TheaterException, RecordNotFoundException;
 	
 	
 	
