@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import cinema.customer.dao.CustomerDao;
+import cinema.customer.dao.CustomerDaoImpl;
 import cinema.dtos.CustomerDto;
 import cinema.exception.CustomerException;
 import cinema.exception.DuplicatedIdException;
