@@ -47,18 +47,20 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		try {
 			con = JdbcUtil.connect();
 
-			String sql = "SELECT * FROM SCHEDULE ORDER BY mnum, scdate";
-
+			String sql = "SELECT S.SCNUM, S.SCDATE, S.SCTIME, S.MNUM, S.THNUM, M.TITLE "
+					+ "FROM SCHEDULE S join MOVIE M on(S.MNUM = M.MNUM) ORDER BY S.mnum, S.scdate, S.sctime";
+			
 			pstmt = con.prepareStatement(sql);
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				int scnum = rs.getInt("scnum");
+				int scnum = rs.getInt(1);
 				String scdate = rs.getString("scdate");
 				String sctime = rs.getString("sctime");
 				int mnum = rs.getInt("mnum");
 				int thnum = rs.getInt("thnum");
-				ScheduleDto dto = new ScheduleDto(scnum, scdate, sctime, mnum, thnum);
+				String title = rs.getString("title");
+				ScheduleDto dto = new ScheduleDto(scnum, scdate, sctime, mnum, thnum, title);
 				result.add(dto);
 			}
 		} catch (ClassNotFoundException e) {
@@ -75,8 +77,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		PreparedStatement pstmt = null;
 		try {
 			// 등록여부 검사
-			if (findById(dto.getMnum()) == null) {
-				throw new RecordNotFoundException(dto.getMnum() + "는 없습니다");
+			if (findById(dto.getScnum()) == null) {
+				throw new RecordNotFoundException(dto.getScnum() + "는 없습니다");
 			}
 
 			con = JdbcUtil.connect();
@@ -88,7 +90,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
 			pstmt.setString(1, dto.getScdate());
 			pstmt.setString(2, dto.getSctime());
-			pstmt.setInt(3, dto.getMnum());
+			pstmt.setInt(3, dto.getScnum());
 
 			int count = pstmt.executeUpdate();
 		} catch (ClassNotFoundException e) {
