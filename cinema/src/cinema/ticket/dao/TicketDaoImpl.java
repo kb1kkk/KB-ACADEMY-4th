@@ -1,10 +1,10 @@
-package cinema;
+package cinema.ticket.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import cinema.dao.TicketDao;
+import cinema.dtos.TicketDto;
 import cinema.exception.DuplicatedIdException;
 import cinema.util.JdbcUtil;
 

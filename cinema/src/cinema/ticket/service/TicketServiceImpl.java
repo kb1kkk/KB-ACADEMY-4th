@@ -1,10 +1,12 @@
-package cinema;
+package cinema.ticket.service;
 
 import java.sql.SQLException;
 
-import cinema.dao.TicketDao;
+import cinema.dtos.TicketDto;
 import cinema.exception.DuplicatedIdException;
 import cinema.exception.TicketException;
+import cinema.ticket.dao.TicketDao;
+import cinema.ticket.dao.TicketDaoImpl;
 
 public class TicketServiceImpl implements TicketService {
 	private TicketDao ticketDao = new TicketDaoImpl();
