@@ -9,7 +9,7 @@ import cinema.exception.ScheduleException;
 /** 상영 일정 CRUD */
 public interface ScheduleService {
 	// 상영일정 등록
-	public boolean add(ScheduleDto dto) throws ScheduleException;
+	public boolean add(ScheduleDto dto) throws ScheduleException, RecordNotFoundException;
 
 	// 상영일정 목록
 	public List<ScheduleDto> list() throws ScheduleException;

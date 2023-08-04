@@ -64,6 +64,7 @@ public class MovieServiceImpl implements MovieService {
 			if (dto == null) {
 				throw new RecordNotFoundException();
 			}
+			movieDao.delete(no);
 		} catch (SQLException e) {
 			throw new MovieException(e.getMessage());
 		}
