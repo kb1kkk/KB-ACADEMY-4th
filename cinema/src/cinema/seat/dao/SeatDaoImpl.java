@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import cinema.dtos.SeatDto;
+import cinema.dtos.TicketDto;
 import cinema.exception.DuplicatedIdException;
 import cinema.util.JdbcUtil;
 
@@ -72,6 +73,34 @@ public class SeatDaoImpl implements SeatDao {
 		}
 		return result;
 
+	}
+
+	@Override
+	public void changeSeatStatus(TicketDto dto) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int price = 0;
+		try {
+			con = JdbcUtil.connect();
+			// 3. SQL 작성
+			String sql = "UPDATE SEAT SET SEATSTATUS = 1 WHERE SEATNUM = ?";
+			// 4. Statement 생성
+			ps = con.prepareStatement(sql);
+			
+			// 5. 데이터 설정
+			ps.setInt(1,dto.getSeatnum());
+			
+			// 6. SQL 전송 및 결과 수신
+			// 		DML전송 : executeUpdate() : int 반환
+			//		SELECT 전송 : executeQuery() : ResultSet 반환	
+			int count = ps.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			throw new SQLException(e);
+		} finally {
+			//DBMS 해제
+			JdbcUtil.close(ps,con);
+		}
+		
 	}
 	
 	

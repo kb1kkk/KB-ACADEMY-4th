@@ -7,6 +7,7 @@ import cinema.customer.service.CoustomerService;
 import cinema.customer.service.CustomerServiceImpl;
 import cinema.dtos.CustomerDto;
 import cinema.dtos.MovieDto;
+import cinema.dtos.PaymentDto;
 import cinema.dtos.ScheduleDto;
 import cinema.dtos.SeatDto;
 import cinema.dtos.SnackDto;
@@ -14,6 +15,7 @@ import cinema.dtos.SnackOrderDto;
 import cinema.dtos.TicketDto;
 import cinema.exception.CustomerException;
 import cinema.exception.MovieException;
+import cinema.exception.PaymentException;
 import cinema.exception.RecordNotFoundException;
 import cinema.exception.ScheduleException;
 import cinema.exception.SnackException;
@@ -21,6 +23,8 @@ import cinema.exception.TheaterException;
 import cinema.exception.TicketException;
 import cinema.movie.service.MovieService;
 import cinema.movie.service.MovieServiceImpl;
+import cinema.payment.service.PaymentService;
+import cinema.payment.service.PaymentServiceImpl;
 import cinema.schedule.service.ScheduleService;
 import cinema.schedule.service.ScheduleServiceImpl;
 import cinema.seat.service.SeatService;
@@ -44,9 +48,12 @@ public class CinemaUi {
 	private ScheduleService ScheduleSvc;
 	private SnackService snackSvc;
 	private SnackOrderService snackOrdSvc;
+	private PaymentService paymentSvc;
 
 	private static Scanner sc = new Scanner(System.in);
 	private CustomerDto curUser = null;
+	private SnackOrderDto soDto = null;
+	
 
 	public static void main(String[] args) {
 		new CinemaUi().go();
@@ -68,6 +75,7 @@ public class CinemaUi {
 		theaterSvc = new TheaterServiceImpl();
 		snackSvc = new SnackServiceImpl();
 		snackOrdSvc = new SnackOrderServiceImpl();
+		paymentSvc = new PaymentServiceImpl();
 	}
 
 	private void mainMenu() {
@@ -115,6 +123,7 @@ public class CinemaUi {
 
 	private void reset() {
 		curUser = null;
+		soDto = null;
 	}
 
 	// 로그인 처리 함수
@@ -150,8 +159,9 @@ public class CinemaUi {
 				System.out.print("메뉴 선택: ");
 				int snackStatus = Integer.parseInt(sc.nextLine());
 				if (snackStatus == 1) {
+					recomendation();
 					snack();
-
+					payment();
 				} else if (snackStatus == 2) {
 					System.out.println("결제하기로 넘어감");
 				}
@@ -170,6 +180,96 @@ public class CinemaUi {
 		} else {
 			System.out.println("비정상적인 접근입니다.");
 		}
+	}
+
+	private void recomendation() {
+		int bestpop=0;
+		int bestdrink=0;
+		try {
+			bestpop=snackOrdSvc.getBestPop();
+			bestdrink=snackOrdSvc.getBestDrink();
+			System.out.println(bestpop);
+		} catch (SnackException e) {
+			e.printStackTrace();
+		}
+		if(bestpop == 1) {
+			System.out.println(" **** 인기가 가장 많은 팝콘은 '일반팝콘'입니다. **** ");
+		}else if(bestpop == 2) {
+			System.out.println(" **** 인기가 가장 많은 팝콘은 '캬라멜 팝콘'입니다. **** ");
+		}else if(bestpop == 3) {
+			System.out.println(" **** 인기가 가장 많은 팝콘은 '치즈맛 팝콘'입니다. **** ");
+		}
+		if(bestdrink == 4) {
+			System.out.println(" **** 인기가 가장 많은 음료는 '콜라'입니다. **** ");
+		}else if(bestdrink == 5) {
+			System.out.println(" **** 인기가 가장 많은 음료는 '사이다'입니다. **** ");
+		}else if(bestdrink == 6) {
+			System.out.println(" **** 인기가 가장 많은 음료는 '오렌지주스'입니다. **** ");
+		}
+	}
+
+	private void payment() {
+		TicketDto ticket = null;
+		ScheduleDto schedule = null;
+		MovieDto movie = null;
+		PaymentDto payResult = null;
+		try {
+			ticket = TicketSvc.getTicketByCnum(curUser.getCnum());
+			schedule =ScheduleSvc.read(ticket.getScnum());
+			movie = MovieSvc.read(schedule.getMnum());
+
+		} catch (MovieException e) {
+			System.out.println("영화 정보 불러오기 오류");
+		} catch (ScheduleException e) {
+			System.out.println("상영 일정 정보 불러오기 오류");
+		} catch (RecordNotFoundException e) {
+			System.out.println("상영 일정 정보 불러오기 오류");
+		} catch (TicketException e) {
+			System.out.println("티켓 정보 불러오기 오류");
+		}
+		String popcorn = null;
+		String drink = null;
+		if(soDto.getPopnum() == 1) {
+			popcorn = "일반 팝콘";
+		}else if (soDto.getPopnum() == 2) {
+			popcorn = "캬라멜 팝콘";
+		}else if (soDto.getPopnum() == 3) {
+			popcorn = "치즈맛 팝콘";
+		}
+		if(soDto.getBnum() == 4) {
+			drink = "콜라";
+		}else if (soDto.getBnum() == 5) {
+			drink = "사이다";
+		}else if (soDto.getBnum() == 6) {
+			drink = "오렌지 주스";
+		}
+		int totprice =(soDto.getStcnt()+ticket.getTprice());
+		System.out.println(" *** 결제내역 **** ");
+		System.out.println(" 회원 아이디 : "+curUser.getCid());
+		System.out.println(" 영화 제목 : "+movie.getTitle());
+		System.out.println(" 영화 상영관 : "+ticket.getThnum()+"관");
+		System.out.println(" 좌석 번호 : "+ticket.getSeatnum()+"번 좌석");
+		System.out.println(" 영화 상영일정 : "+schedule.getScdate().substring(0,4)+"년"
+				+schedule.getScdate().substring(4,6)+"월"+schedule.getScdate().substring(6,8)+"일");
+		System.out.println(" 영화 상영시작시간 : "+schedule.getSctime().substring(0,2)+":"+schedule.getSctime().substring(2,4));
+		System.out.println(" 팝콘 종류(수량) : "+popcorn+"("+soDto.getPopcnt()+"개)");
+		System.out.println(" 음료 종류(수량) : "+drink+"("+soDto.getBcnt()+"개)");
+		System.out.println(" 총 구매 가격 : "+totprice+"원");
+		System.out.println("-----------------------------------------------");
+		System.out.println("결제하시겠습니까?  (1) 예 (2) 아니오");
+		payResult = new PaymentDto(0,curUser.getCnum(),soDto.getSonum(),totprice,null);
+		int payCheck = Integer.parseInt(sc.nextLine());
+		if(payCheck == 1) {
+			try {
+				paymentSvc.getPay(payResult);
+			} catch (PaymentException e) {
+				System.out.println("결제오류");
+			} catch (RecordNotFoundException e) {
+				System.out.println("결제오류");
+			}
+			System.out.println("결제 완료!");
+		}
+		
 	}
 
 	private void reservation() {
@@ -200,7 +300,7 @@ public class CinemaUi {
 		int seatnumber = Integer.parseInt(sc.nextLine());
 
 		// 좌석status가 0일떄
-		int ticketPrice = 120000;
+		int ticketPrice = 12000;
 		// 현재 회원 정보 가져오기
 		int cnum = curUser.getCnum();
 		TicketDto dto = new TicketDto(0, scnum, thnum, seatnumber, cnum, ticketPrice, 0);
@@ -360,81 +460,80 @@ public class CinemaUi {
 
 		}
 	}
-
+	
 	// 간식메뉴
-	private void snack() {
-		List<SnackDto> list = popMenu();
-		int popcorn = 0;
-		int popcnt = 0;
-		while (true) {
-			System.out.println("팝콘은 어떤걸 사시겠습니까?");
-			popcorn = Integer.parseInt(sc.nextLine());
-			if (popcorn == 0) {
-				System.out.println("팝콘을 선택안하셨습니다");
-				break;
-			} else if (popcorn == 1) {
-				System.out.println("일반 팝콘");
-				break;
-			} else if (popcorn == 2) {
-				System.out.println("카라멜 팝콘");
-				break;
-			} else if (popcorn == 3) {
-				System.out.println("치즈맛 팝콘");
-				break;
-			} else {
-				System.out.println("팝콘을 선택해주세요.");
-				continue;
+		private void snack() {
+			List<SnackDto> list = popMenu();
+			int popcorn = 0;
+			int popcnt = 0;
+			while (true) {
+				System.out.println("팝콘은 어떤걸 사시겠습니까?");
+				popcorn = Integer.parseInt(sc.nextLine());
+				if(popcorn == 0){
+					System.out.println("팝콘을 선택안하셨습니다");
+					break;
+				}else if (popcorn == 1) {
+					System.out.println("일반 팝콘");
+					break;
+				} else if (popcorn == 2) {
+					System.out.println("카라멜 팝콘");
+					break;
+				} else if (popcorn == 3) {
+					System.out.println("치즈맛 팝콘");
+					break;
+				} else {
+					System.out.println("팝콘을 선택해주세요.");
+					continue;
+				}
 			}
-		}
-		System.out.println("팝콘수량은 몇개가 필요한가요?");
-		popcnt = Integer.parseInt(sc.nextLine());
-		int drink = 0;
-		int drinkcnt = 0;
-		while (true) {
-			drinkMenu(list);
-			drink = Integer.parseInt(sc.nextLine());
-			if (drink == 0) {
-				System.out.println("음료를 선택안하셨습니다");
-				break;
-			} else if (drink == 1) {
-				drink = 4;
-				System.out.println("콜라");
-				break;
-			} else if (drink == 2) {
-				drink = 5;
-				System.out.println("사이다");
-				break;
-			} else if (drink == 3) {
-				drink = 6;
-				System.out.println("오렌지주스");
-				break;
-			} else {
-				System.out.println("음료를 선택해주세요.");
-				continue;
+			System.out.println("팝콘수량은 몇개가 필요한가요?");
+			popcnt = Integer.parseInt(sc.nextLine());
+			int drink =0;
+			int drinkcnt = 0;
+			while(true){
+				drinkMenu(list);
+				drink = Integer.parseInt(sc.nextLine());
+				if(drink == 0){
+					System.out.println("음료를 선택안하셨습니다");
+					break;
+				}else if (drink == 1) {
+					drink = 4;
+					System.out.println("콜라");
+					break;
+				} else if (drink == 2) {
+					drink = 5;
+					System.out.println("사이다");
+					break;
+				} else if (drink == 3) {
+					drink = 6;
+					System.out.println("오렌지주스");
+					break;
+				} else {
+					System.out.println("음료를 선택해주세요.");
+					continue;
+				}
 			}
-		}
-		System.out.println("음료수량은 몇개가 필요한가요?");
-		drinkcnt = Integer.parseInt(sc.nextLine());
-		snackOrdSvc = new SnackOrderServiceImpl();
-		SnackOrderDto sdto = null;
+			System.out.println("음료수량은 몇개가 필요한가요?");
+			drinkcnt = Integer.parseInt(sc.nextLine());
+			snackOrdSvc = new SnackOrderServiceImpl();
 
-		int popprice = 0;
-		int drinkprice = 0;
-		try {
-			popprice = snackSvc.getPrice(popcorn);
-			drinkprice = snackSvc.getPrice(drink);
-		} catch (SnackException e) {
-			throw new RuntimeException(e);
+			int popprice =0;
+			int drinkprice =0;
+			try {
+				popprice = snackSvc.getPrice(popcorn);
+				drinkprice = snackSvc.getPrice(drink);
+			} catch (SnackException e) {
+			}
+			int stcnt =(popcnt * popprice)+ (drinkprice * drinkcnt); // 간식 총금액
+			soDto = new SnackOrderDto(0,popcorn,popcnt,drink,drinkcnt,stcnt,curUser.getCnum(),0);
+			System.out.println("간식 총 금액은 " +stcnt+" 입니다");
+			try {
+				snackOrdSvc.add(soDto);
+				soDto = snackOrdSvc.getSnackOrder(soDto);
+			}  catch (SnackException e) {
+				throw new RuntimeException(e);
+			}
 		}
-		int stcnt = (popcnt * popprice) + (drinkprice * drinkcnt); // 간식 총금액
-		sdto = new SnackOrderDto(0, popcorn, popcnt, drink, drinkcnt, stcnt);
-		System.out.println("총 금액은 " + stcnt + " 입니다");
-		try {
-			snackOrdSvc.add(sdto);
-		} catch (SnackException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	// 영화 추가
 	private void addMovie() {
